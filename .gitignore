@@ -17,3 +17,4 @@ prisma/migrations
 render.yaml
 
 /src/generated/prisma
+/src/generated/prisma
