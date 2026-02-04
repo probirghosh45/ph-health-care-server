@@ -1,13 +1,32 @@
 {
   "name": "ph-health-care-server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "PH HealthCare Backend API - Node.js Express TypeScript Prisma",
+  "main": "dist/server.js",
+  "type": "module",
+  "license": "MIT",
+  "packageManager": "pnpm@10.28.2",
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=10.0.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx watch --env-file=.env ./src/server.ts"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.28.2"
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@tsconfig/node22": "^22.0.5",
+    "@tsconfig/strictest": "^2.0.8",
+    "@types/node": "^25.2.0",
+    "eslint": "^9.39.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.54.0"
+  },
+  "dependencies": {
+    "@types/express": "^5.0.6",
+    "express": "^5.2.1"
+  }
 }

@@ -1,0 +1,918 @@
+{
+  /*
+   * ╔══════════════════════════════════════════════════════════════════════════════╗
+   * ║              TSCONFIG.JSON - TYPESCRIPT CONFIGURATION FILE                   ║
+   * ║                    Complete Beginner's Guide                                 ║
+   * ╚══════════════════════════════════════════════════════════════════════════════╝
+   *
+   * 📚 WHAT IS THIS FILE?
+   * ---------------------
+   * tsconfig.json tells TypeScript HOW to compile your code.
+   * Think of it as "rules and settings" for TypeScript.
+   *
+   * Without this file, TypeScript uses defaults which may not be ideal.
+   *
+   * 📖 DOCUMENTATION:
+   * - Official: https://www.typescriptlang.org/tsconfig
+   * - All Options: https://www.typescriptlang.org/tsconfig#compilerOptions
+   *
+   * 🔄 WORKFLOW:
+   * 1. You write TypeScript (.ts files) in src/
+   * 2. Run `tsc` (TypeScript compiler)
+   * 3. tsconfig.json tells tsc what to do
+   * 4. JavaScript files are created in dist/
+   *
+   *   src/server.ts  ──► tsconfig.json rules ──► dist/server.js
+   *
+   *
+   */
+
+  /*
+   * $schema - JSON Schema for IntelliSense
+   * ─────────────────────────────────────────
+   * This provides autocomplete and validation in VS Code.
+   * When you type, VS Code shows available options.
+   *
+   * TRY IT: Delete any line and press Ctrl+Space to see suggestions!
+   */
+  "$schema": "https://json.schemastore.org/tsconfig",
+
+  /*
+   * ╔══════════════════════════════════════════════════════════════════════════════╗
+   * ║                              EXTENDS                                         ║
+   * ║                    Inherit from preset configurations                        ║
+   * ╚══════════════════════════════════════════════════════════════════════════════╝
+   *
+   * WHY EXTEND?
+   * -----------
+   * Instead of writing 100+ options, we inherit from battle-tested presets.
+   * It's like using a template, then customizing what you need.
+   *
+   * ORDER MATTERS:
+   * - Later configs override earlier ones
+   * - Our compilerOptions below override both presets
+   *
+   * PRESETS USED:
+   *
+   * 1. @tsconfig/strictest
+   *    ────────────────────
+   *    Enables MAXIMUM type safety. Catches the most bugs.
+   *    Settings: strict: true, noImplicitAny: true, strictNullChecks: true, etc.
+   *    Install: npm install -D @tsconfig/strictest
+   *    Docs: https://github.com/tsconfig/bases
+   *
+   * 2. @tsconfig/node22
+   *    ─────────────────
+   *    Optimized settings for Node.js 22 runtime.
+   *    Settings: target, lib, module optimized for Node 22 features.
+   *    Install: npm install -D @tsconfig/node22
+   *
+   * WHAT WE INHERIT:
+   * ┌────────────────────────────────────────────────────────────────┐
+   * │  @tsconfig/strictest        │  @tsconfig/node22               │
+   * │  ─────────────────────────  │  ──────────────────────         │
+   * │  strict: true               │  target: ES2023                 │
+   * │  noImplicitAny: true        │  module: NodeNext               │
+   * │  strictNullChecks: true     │  lib: ["ES2023"]                │
+   * │  noFallthroughCasesInSwitch │  moduleResolution: NodeNext     │
+   * │  noImplicitReturns: true    │  esModuleInterop: true          │
+   * └────────────────────────────────────────────────────────────────┘
+   */
+  "extends": [
+    "@tsconfig/strictest/tsconfig.json",
+    "@tsconfig/node22/tsconfig.json"
+  ],
+
+  /*
+   * ╔══════════════════════════════════════════════════════════════════════════════╗
+   * ║                          COMPILER OPTIONS                                    ║
+   * ║                These settings control how TypeScript compiles                ║
+   * ╚══════════════════════════════════════════════════════════════════════════════╝
+   */
+  "compilerOptions": {
+    /*
+     * ┌────────────────────────────────────────────────────────────────────────────┐
+     * │                    LANGUAGE AND ENVIRONMENT                                │
+     * │         What JavaScript version and features to use                        │
+     * └────────────────────────────────────────────────────────────────────────────┘
+     */
+
+    /*
+     * target: "ES2023"
+     * ────────────────────────────────────────
+     * WHAT: Specifies which JavaScript version to output
+     *
+     * WHY ES2023?
+     * - Node.js 22 fully supports ES2023
+     * - No need for polyfills or transpilation
+     * - Smaller, faster output
+     *
+     * COMPARISON:
+     * ┌──────────────────────────────────────────────────────────────────┐
+     * │ Target    │ Features Available                                  │
+     * │───────────│─────────────────────────────────────────────────────│
+     * │ ES5       │ var, function (ancient, for IE11)                   │
+     * │ ES2015    │ let, const, arrow functions, classes                │
+     * │ ES2020    │ BigInt, optional chaining (?.), nullish (??)        │
+     * │ ES2022    │ Top-level await, private class fields (#)           │
+     * │ ES2023    │ Array findLast(), hashbang (#!), WeakMap changes    │
+     * └──────────────────────────────────────────────────────────────────┘
+     *
+     * EXAMPLE - What TypeScript outputs:
+     *
+     * // Your TypeScript (input)
+     * const greet = (name: string) => `Hello ${name}`;
+     *
+     * // With target ES5 (output) - Converted to old syntax
+     * var greet = function(name) { return "Hello " + name; };
+     *
+     * // With target ES2023 (output) - Kept modern
+     * const greet = (name) => `Hello ${name}`;
+     */
+    "target": "ES2023",
+
+    /*
+     * lib: ["ES2023"]
+     * ────────────────────────────────────────
+     * WHAT: Which built-in type definitions to include
+     *
+     * WHY?
+     * TypeScript needs to know what global objects exist.
+     * - "ES2023" includes: Array, Map, Set, Promise, etc.
+     * - "DOM" includes: document, window (for browsers)
+     *
+     * WE DON'T INCLUDE "DOM" because:
+     * - This is a Node.js server
+     * - No browser APIs exist here
+     * - Adding DOM would allow invalid code like document.getElementById()
+     *
+     * AVAILABLE LIBS:
+     * - ES5, ES2015, ES2016, ES2017, ES2018, ES2019, ES2020, ES2021, ES2022, ES2023
+     * - DOM, DOM.Iterable (for browsers)
+     * - WebWorker (for web workers)
+     * - ScriptHost (for Windows Script Host)
+     */
+    "lib": ["ES2023"],
+
+    /*
+     * useDefineForClassFields: true
+     * ────────────────────────────────────────
+     * WHAT: Use ECMAScript standard for class field initialization
+     *
+     * WHY?
+     * JavaScript and TypeScript had different class field behavior.
+     * This ensures we use the standard JavaScript behavior.
+     *
+     * EXAMPLE - The Difference:
+     *
+     * class Example {
+     *   name = "default";
+     *
+     *   constructor() {
+     *     // With useDefineForClassFields: true
+     *     // 'name' is defined BEFORE constructor runs (standard JS)
+     *
+     *     // With useDefineForClassFields: false
+     *     // 'name' is assigned AFTER constructor runs (old TS behavior)
+     *   }
+     * }
+     *
+     * RULE: Always set to true for new projects (matches JavaScript standard)
+     */
+    "useDefineForClassFields": true,
+
+    /*
+     * moduleDetection: "auto"
+     * ────────────────────────────────────────
+     * WHAT: How TypeScript determines if a file is a module or script
+     *
+     * OPTIONS:
+     * - "auto": Checks for import/export OR package.json "type": "module"
+     * - "force": Always treat as module
+     * - "legacy": Only check for import/export (old behavior)
+     *
+     * WHY "auto"?
+     * Our package.json has "type": "module", so all files are ESM.
+     * "auto" respects this setting automatically.
+     *
+     * MODULE vs SCRIPT:
+     * ┌────────────────────────────────────────────────────────────────┐
+     * │ Module                          │ Script                       │
+     * │─────────────────────────────────│──────────────────────────────│
+     * │ Has import/export               │ No import/export             │
+     * │ Own scope (variables isolated)  │ Global scope (shared)        │
+     * │ Strict mode by default          │ May not be strict            │
+     * └────────────────────────────────────────────────────────────────┘
+     */
+    "moduleDetection": "auto",
+
+    /*
+     * ┌────────────────────────────────────────────────────────────────────────────┐
+     * │                    MODULES - NODE.JS ESM/CJS INTEROP                       │
+     * │              How imports and exports work in Node.js                       │
+     * └────────────────────────────────────────────────────────────────────────────┘
+     */
+
+    /*
+     * module: "NodeNext"
+     * ────────────────────────────────────────
+     * WHAT: How TypeScript generates import/export statements
+     *
+     * WHY "NodeNext"?
+     * - Designed for Node.js 22+ with full ESM support
+     * - Handles both ESM (.mjs) and CommonJS (.cjs)
+     * - Supports TypeScript 5.8+ features like require(esm)
+     *
+     * OPTIONS COMPARISON:
+     * ┌──────────────────────────────────────────────────────────────────────────┐
+     * │ Value         │ Use Case                                                │
+     * │───────────────│─────────────────────────────────────────────────────────│
+     * │ CommonJS      │ Old Node.js (require/module.exports)                    │
+     * │ ES2015-ES2022 │ Specific ES version modules                             │
+     * │ ESNext        │ Latest ES modules (for bundlers like webpack)           │
+     * │ NodeNext      │ Node.js native ESM/CJS (what we use) ✅                 │
+     * │ Preserve      │ Keep imports as-is (for other tools to process)         │
+     * └──────────────────────────────────────────────────────────────────────────┘
+     *
+     * WHAT THIS MEANS FOR YOUR CODE:
+     *
+     * // Your TypeScript
+     * import express from 'express';
+     * export const app = express();
+     *
+     * // With module: "NodeNext" - KEPT AS ESM
+     * import express from 'express';
+     * export const app = express();
+     *
+     * // With module: "CommonJS" - CONVERTED
+     * const express = require('express');
+     * module.exports.app = express();
+     */
+    "module": "NodeNext",
+
+    /*
+     * moduleResolution: "NodeNext"
+     * ────────────────────────────────────────
+     * WHAT: How TypeScript finds modules when you import
+     *
+     * WHEN YOU WRITE: import express from 'express'
+     * TypeScript needs to find where 'express' is located.
+     *
+     * "NodeNext" RESOLUTION STEPS:
+     * 1. Check if 'express' is a core Node.js module (fs, path, etc.)
+     * 2. Look in node_modules/express/
+     * 3. Check package.json "exports" field
+     * 4. Check package.json "main" field
+     * 5. Look for index.js
+     *
+     * WHY THIS MATTERS:
+     * Modern packages use package.json "exports" to define entry points.
+     * "NodeNext" respects this, older resolution strategies don't.
+     *
+     * EXAMPLE package.json "exports":
+     * {
+     *   "exports": {
+     *     ".": "./dist/index.js",           // import pkg from 'pkg'
+     *     "./utils": "./dist/utils.js"      // import { x } from 'pkg/utils'
+     *   }
+     * }
+     */
+    "moduleResolution": "NodeNext",
+
+    /*
+     * rootDir: "./src"
+     * ────────────────────────────────────────
+     * WHAT: The root folder containing source files
+     *
+     * WHY?
+     * - Tells TypeScript where source files live
+     * - Determines output folder structure
+     *
+     * EXAMPLE - Directory Mapping:
+     * ┌────────────────────────────────────────────────────┐
+     * │ Source (rootDir: "./src")  │  Output (outDir)     │
+     * │───────────────────────────────────────────────────│
+     * │ src/server.ts              │  dist/server.js      │
+     * │ src/app/app.ts             │  dist/app/app.js     │
+     * │ src/helpers/jwt.ts         │  dist/helpers/jwt.js │
+     * └────────────────────────────────────────────────────┘
+     *
+     * IF rootDir WAS "./" (project root):
+     * src/server.ts → dist/src/server.js (extra 'src' folder!)
+     */
+    "rootDir": "./src",
+
+    /*
+     * resolveJsonModule: true
+     * ────────────────────────────────────────
+     * WHAT: Allows importing .json files directly
+     *
+     * WITH THIS ENABLED:
+     * import packageJson from '../package.json';
+     * console.log(packageJson.version); // TypeScript knows this is a string!
+     *
+     * WITHOUT THIS:
+     * // Error: Cannot find module '../package.json'
+     *
+     * TYPE SAFETY:
+     * TypeScript automatically creates types from JSON structure.
+     * If package.json has { "version": "1.0.0" }, TypeScript knows
+     * packageJson.version is a string.
+     */
+    "resolveJsonModule": true,
+
+    /*
+     * resolvePackageJsonExports: true
+     * ────────────────────────────────────────
+     * WHAT: Respect the "exports" field in package.json
+     *
+     * Modern packages define entry points in "exports":
+     * {
+     *   "exports": {
+     *     ".": "./dist/index.js",
+     *     "./client": "./dist/client.js"
+     *   }
+     * }
+     *
+     * THIS ALLOWS:
+     * import pkg from 'package';        // Uses "." export
+     * import { x } from 'package/client'; // Uses "./client" export
+     */
+    "resolvePackageJsonExports": true,
+
+    /*
+     * resolvePackageJsonImports: true
+     * ────────────────────────────────────────
+     * WHAT: Respect the "imports" field in package.json
+     *
+     * "imports" defines internal aliases:
+     * {
+     *   "imports": {
+     *     "#utils": "./src/utils/index.js"
+     *   }
+     * }
+     *
+     * THIS ALLOWS:
+     * import { helper } from '#utils'; // Resolves to ./src/utils/index.js
+     *
+     * NOTE: Imports must start with # to differentiate from packages.
+     */
+    "resolvePackageJsonImports": true,
+
+    /*
+     * noUncheckedSideEffectImports: true
+     * ────────────────────────────────────────
+     * WHAT: Verify that side-effect imports exist
+     *
+     * SIDE-EFFECT IMPORT:
+     * import './polyfills';  // Doesn't import anything, just runs the file
+     *
+     * WITH THIS ENABLED:
+     * If './polyfills' doesn't exist, TypeScript errors.
+     *
+     * WHY?
+     * Catches typos in import paths that would otherwise silently fail.
+     */
+    "noUncheckedSideEffectImports": true,
+
+    /*
+     * ┌────────────────────────────────────────────────────────────────────────────┐
+     * │                          EMIT CONFIGURATION                                │
+     * │                    What TypeScript outputs                                 │
+     * └────────────────────────────────────────────────────────────────────────────┘
+     */
+
+    /*
+     * outDir: "./dist"
+     * ────────────────────────────────────────
+     * WHAT: Where compiled JavaScript files go
+     *
+     * FLOW:
+     * src/server.ts → tsc → dist/server.js
+     *
+     * WHY "dist"?
+     * - Common convention (distribution folder)
+     * - Keeps compiled code separate from source
+     * - Easy to .gitignore and clean
+     *
+     * DEPLOYMENT:
+     * Only the dist/ folder goes to production.
+     * Source TypeScript stays in development.
+     */
+    "outDir": "./dist",
+
+    /*
+     * sourceMap: true
+     * ────────────────────────────────────────
+     * WHAT: Generate .js.map files for debugging
+     *
+     * CREATES:
+     * - dist/server.js (compiled code)
+     * - dist/server.js.map (mapping to original TypeScript)
+     *
+     * WHY?
+     * When an error occurs in production:
+     * - Without source maps: Error at dist/server.js line 234
+     * - With source maps: Error at src/server.ts line 45 ✅
+     *
+     * DEBUGGING:
+     * Source maps let VS Code debugger step through TypeScript,
+     * even though Node.js runs JavaScript.
+     *
+     * PRODUCTION NOTE:
+     * Some teams disable in production for security (hides source code).
+     */
+    "sourceMap": true,
+
+    /*
+     * declaration: false
+     * ────────────────────────────────────────
+     * WHAT: Generate .d.ts type declaration files
+     *
+     * WHY FALSE?
+     * - This is an APPLICATION, not a library
+     * - No one imports this package
+     * - Avoids TS2742 errors from Prisma 7 generated code
+     *
+     * IF THIS WERE A LIBRARY:
+     * We'd set declaration: true to generate types for consumers.
+     *
+     * EXAMPLE OUTPUT (if true):
+     * - dist/server.js
+     * - dist/server.d.ts  ← Type declarations for other packages
+     */
+    "declaration": false,
+
+    /*
+     * declarationMap: false
+     * ────────────────────────────────────────
+     * WHAT: Generate source maps for .d.ts files
+     *
+     * DISABLED because declaration is false.
+     * If we generated declarations, this would map them to source.
+     */
+    "declarationMap": false,
+
+    /*
+     * removeComments: true
+     * ────────────────────────────────────────
+     * WHAT: Remove comments from output JavaScript
+     *
+     * INPUT (TypeScript):
+     * // This is a comment
+     * const x = 1; // inline comment
+     *
+     * OUTPUT (JavaScript):
+     * const x = 1;
+     *
+     * WHY?
+     * - Smaller file size
+     * - Faster loading
+     * - Comments are for development, not production
+     *
+     * NOTE: JSDoc comments used for documentation may also be removed.
+     */
+    "removeComments": true,
+
+    /*
+     * noEmitOnError: true
+     * ────────────────────────────────────────
+     * WHAT: Don't generate output if there are errors
+     *
+     * WITH THIS ENABLED:
+     * - Type error in code? Build fails. No broken JavaScript created.
+     *
+     * WITHOUT THIS:
+     * - Type error? Build continues. Broken JavaScript is created.
+     *
+     * WHY?
+     * Prevents deploying broken code.
+     * If there's an error, fix it before building.
+     */
+    "noEmitOnError": true,
+
+    /*
+     * newLine: "lf"
+     * ────────────────────────────────────────
+     * WHAT: Line ending character in output files
+     *
+     * OPTIONS:
+     * - "lf": Unix/Mac style (\n) ← We use this
+     * - "crlf": Windows style (\r\n)
+     *
+     * WHY LF?
+     * - Git prefers LF
+     * - Unix servers use LF
+     * - Cross-platform consistency
+     *
+     * WINDOWS DEVELOPERS:
+     * Your editor should handle this automatically.
+     * Git converts on checkout/commit (core.autocrlf setting).
+     */
+    "newLine": "lf",
+
+    /*
+     * ┌────────────────────────────────────────────────────────────────────────────┐
+     * │                        INTEROP CONSTRAINTS                                 │
+     * │              How TypeScript interacts with JavaScript                      │
+     * └────────────────────────────────────────────────────────────────────────────┘
+     */
+
+    /*
+     * isolatedModules: true
+     * ────────────────────────────────────────
+     * WHAT: Ensure each file can be transpiled independently
+     *
+     * WHY?
+     * Some tools (like esbuild, swc) compile files one at a time.
+     * They don't see other files. This ensures code works with those tools.
+     *
+     * WHAT IT PREVENTS:
+     *
+     * // file1.ts
+     * export const enum Color { Red, Green, Blue }
+     *
+     * // file2.ts
+     * import { Color } from './file1';
+     * const c = Color.Red; // ❌ Error with isolatedModules
+     *
+     * WHY ERROR?
+     * const enum is inlined at compile time. A single-file compiler
+     * can't inline it because it doesn't see file1.ts.
+     *
+     * SOLUTION: Use regular enum instead of const enum.
+     */
+    "isolatedModules": true,
+
+    /*
+     * verbatimModuleSyntax: true
+     * ────────────────────────────────────────
+     * WHAT: Strict handling of import/export types
+     *
+     * ENFORCES:
+     * - Type-only imports must use 'import type'
+     * - Type-only exports must use 'export type'
+     *
+     * EXAMPLE:
+     *
+     * // ❌ Without verbatimModuleSyntax
+     * import { User } from './types'; // Is User a type or value?
+     *
+     * // ✅ With verbatimModuleSyntax
+     * import type { User } from './types'; // Clearly a type
+     * import { createUser } from './functions'; // Clearly a value
+     *
+     * WHY?
+     * - Clearer code (you know what's a type vs value)
+     * - Better tree-shaking (types are removed at compile time)
+     * - Required for some bundlers
+     */
+    "verbatimModuleSyntax": true,
+
+    /*
+     * esModuleInterop: true
+     * ────────────────────────────────────────
+     * WHAT: Better interop with CommonJS modules
+     *
+     * PROBLEM:
+     * CommonJS modules don't have default exports.
+     * ESM expects: import express from 'express'
+     * CommonJS is: const express = require('express')
+     *
+     * WITH esModuleInterop:
+     * TypeScript adds a helper to make CommonJS work like ESM.
+     *
+     * EXAMPLE:
+     * // express uses CommonJS (module.exports = function() {})
+     *
+     * // ❌ Without esModuleInterop
+     * import * as express from 'express';
+     * const app = (express as any).default();
+     *
+     * // ✅ With esModuleInterop
+     * import express from 'express';
+     * const app = express();
+     */
+    "esModuleInterop": true,
+
+    /*
+     * allowSyntheticDefaultImports: true
+     * ────────────────────────────────────────
+     * WHAT: Allow default imports from modules without default export
+     *
+     * SIMILAR to esModuleInterop but for type checking only.
+     * esModuleInterop handles runtime, this handles types.
+     *
+     * Usually enabled automatically when esModuleInterop is true.
+     */
+    "allowSyntheticDefaultImports": true,
+
+    /*
+     * forceConsistentCasingInFileNames: true
+     * ────────────────────────────────────────
+     * WHAT: Error if import casing doesn't match actual filename
+     *
+     * EXAMPLE:
+     * // File is: UserService.ts
+     *
+     * import { x } from './userservice'; // ❌ Error: wrong case
+     * import { x } from './UserService'; // ✅ Correct
+     *
+     * WHY?
+     * - Windows: File system is case-insensitive (userservice = UserService)
+     * - Linux: File system is case-sensitive (userservice ≠ UserService)
+     *
+     * Without this:
+     * - Code works on Windows
+     * - Code BREAKS on Linux server deployment
+     *
+     * This catches the issue on Windows before deploying.
+     */
+    "forceConsistentCasingInFileNames": true,
+
+    /*
+     * ┌────────────────────────────────────────────────────────────────────────────┐
+     * │                      TYPE CHECKING - STRICTEST MODE                        │
+     * │               Maximum type safety (catches the most bugs)                  │
+     * └────────────────────────────────────────────────────────────────────────────┘
+     */
+
+    /*
+     * strict: true
+     * ────────────────────────────────────────
+     * WHAT: Enable ALL strict type-checking options
+     *
+     * THIS SINGLE FLAG ENABLES:
+     * ┌──────────────────────────────────────────────────────────────────────────┐
+     * │ Flag                      │ What it does                                │
+     * │───────────────────────────│─────────────────────────────────────────────│
+     * │ strictNullChecks          │ null and undefined are distinct types       │
+     * │ strictFunctionTypes       │ Strict checking of function parameters      │
+     * │ strictBindCallApply       │ Strict checking of bind, call, apply        │
+     * │ strictPropertyInit..      │ Class properties must be initialized        │
+     * │ noImplicitAny             │ Error if 'any' is inferred                  │
+     * │ noImplicitThis            │ Error if 'this' has implicit any type       │
+     * │ useUnknownInCatchVars     │ catch(e) has 'unknown' type, not 'any'      │
+     * │ alwaysStrict              │ Add "use strict" to all files               │
+     * └──────────────────────────────────────────────────────────────────────────┘
+     *
+     * EXAMPLE - strictNullChecks:
+     *
+     * // Without strict
+     * function greet(name: string) {
+     *   console.log(name.toUpperCase()); // No error, but crashes if name is null!
+     * }
+     * greet(null); // Runtime error: Cannot read property 'toUpperCase' of null
+     *
+     * // With strict: true
+     * function greet(name: string) {
+     *   console.log(name.toUpperCase());
+     * }
+     * greet(null); // ❌ Compile error: Argument of type 'null' is not assignable
+     *
+     * ALWAYS ENABLE strict: true for new projects!
+     */
+    "strict": true,
+
+    /*
+     * noUnusedLocals: false
+     * ────────────────────────────────────────
+     * WHAT: Error on unused local variables
+     *
+     * EXAMPLE:
+     * function example() {
+     *   const unused = 5; // ❌ Error if noUnusedLocals: true
+     *   return 10;
+     * }
+     *
+     * WHY FALSE (for now)?
+     * - During development, we often declare variables before using them
+     * - ESLint already warns about this
+     * - Can be annoying during active development
+     *
+     * TODO: Enable before production for cleaner code
+     */
+    "noUnusedLocals": false,
+
+    /*
+     * noUnusedParameters: false
+     * ────────────────────────────────────────
+     * WHAT: Error on unused function parameters
+     *
+     * EXAMPLE:
+     * function handle(req, res, next) { // ❌ 'next' unused
+     *   res.send('OK');
+     * }
+     *
+     * WORKAROUND (prefix with underscore):
+     * function handle(req, res, _next) { // ✅ OK, intentionally unused
+     *   res.send('OK');
+     * }
+     *
+     * WHY FALSE?
+     * Express middleware often requires specific signatures.
+     * Error handlers MUST have 4 parameters even if not all used.
+     */
+    "noUnusedParameters": false,
+
+    /*
+     * exactOptionalPropertyTypes: false
+     * ────────────────────────────────────────
+     * WHAT: Stricter checking of optional properties
+     *
+     * EXAMPLE:
+     * interface Settings {
+     *   theme?: 'light' | 'dark';
+     * }
+     *
+     * // With exactOptionalPropertyTypes: true
+     * const settings: Settings = { theme: undefined }; // ❌ Error!
+     * // Can't explicitly set to undefined, must omit entirely
+     *
+     * // Correct way:
+     * const settings: Settings = {}; // ✅ OK
+     *
+     * WHY FALSE?
+     * - Requires significant code changes
+     * - Many libraries don't follow this pattern
+     * - TODO: Enable in future refactoring
+     */
+    "exactOptionalPropertyTypes": false,
+
+    /*
+     * noUncheckedIndexedAccess: false
+     * ────────────────────────────────────────
+     * WHAT: Add undefined to indexed access results
+     *
+     * EXAMPLE:
+     * const arr = [1, 2, 3];
+     *
+     * // Without noUncheckedIndexedAccess
+     * const x = arr[10]; // Type: number (but actually undefined!)
+     *
+     * // With noUncheckedIndexedAccess: true
+     * const x = arr[10]; // Type: number | undefined ✅
+     *
+     * WHY FALSE?
+     * - Requires null checks everywhere
+     * - Can be verbose for simple array access
+     * - TODO: Consider enabling for safer code
+     */
+    "noUncheckedIndexedAccess": false,
+
+    /*
+     * noPropertyAccessFromIndexSignature: false
+     * ────────────────────────────────────────
+     * WHAT: Require bracket notation for dynamic properties
+     *
+     * EXAMPLE:
+     * interface Config {
+     *   [key: string]: string;
+     * }
+     * const config: Config = { apiKey: 'xxx' };
+     *
+     * // With noPropertyAccessFromIndexSignature: true
+     * config.apiKey; // ❌ Error: must use bracket notation
+     * config['apiKey']; // ✅ OK
+     *
+     * WHY FALSE?
+     * - Dot notation is more readable
+     * - Most teams prefer consistency over this strictness
+     */
+    "noPropertyAccessFromIndexSignature": false,
+
+    /*
+     * ┌────────────────────────────────────────────────────────────────────────────┐
+     * │                    BUILD PERFORMANCE OPTIMIZATION                          │
+     * │                    Faster compilation and rebuilds                         │
+     * └────────────────────────────────────────────────────────────────────────────┘
+     */
+
+    /*
+     * incremental: true
+     * ────────────────────────────────────────
+     * WHAT: Cache compilation results for faster rebuilds
+     *
+     * FIRST BUILD: Slow (compiles everything, creates cache)
+     * SUBSEQUENT BUILDS: Fast (only recompiles changed files)
+     *
+     * HOW IT WORKS:
+     * 1. First build: TypeScript compiles all files, saves state to .tsbuildinfo
+     * 2. Next build: TypeScript reads .tsbuildinfo, only compiles changes
+     *
+     * PERFORMANCE IMPACT:
+     * - Large projects: 10x faster rebuilds
+     * - Small projects: 2-3x faster
+     *
+     * SPACE USAGE:
+     * Creates .tsbuildinfo file (~few MB for large projects)
+     */
+    "incremental": true,
+
+    /*
+     * tsBuildInfoFile: "./dist/.tsbuildinfo"
+     * ────────────────────────────────────────
+     * WHAT: Where to store incremental build cache
+     *
+     * WHY in dist/?
+     * - Keeps cache with build artifacts
+     * - Deleted when running `pnpm clean`
+     * - Not committed to git (dist/ is gitignored)
+     */
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
+
+    /*
+     * skipLibCheck: true
+     * ────────────────────────────────────────
+     * WHAT: Skip type checking of .d.ts declaration files
+     *
+     * WHY?
+     * - MUCH faster compilation (doesn't check node_modules types)
+     * - Library types are already checked by library authors
+     * - Avoids errors from conflicting type versions
+     *
+     * TRADEOFF:
+     * - May miss some type errors in library usage
+     * - In practice, rarely an issue
+     *
+     * PERFORMANCE:
+     * - Can reduce build time by 50%+ for large projects
+     */
+    "skipLibCheck": true
+  },
+
+  /*
+   * ╔══════════════════════════════════════════════════════════════════════════════╗
+   * ║                       FILE INCLUSION / EXCLUSION                             ║
+   * ║                   Which files TypeScript should process                      ║
+   * ╚══════════════════════════════════════════════════════════════════════════════╝
+   */
+
+  /*
+   * include: ["src/**\/*"]
+   * WHAT: Files/folders to compile
+   *
+   * PATTERN: "src/**\/*"
+   * - src/        = Start in src folder
+   * - **          = Any nested folder depth
+   * - /\*          = Any file
+   * - Together: All files in src/ and all subfolders
+   *
+   * MATCHES:
+   * - src/server.ts
+   * - src/app/app.ts
+   * - src/app/modules/user/user.service.ts
+   *
+   * DOESN'T MATCH:
+   * - prisma/seed.ts (not in src/)
+   * - tsconfig.json (not in src/)
+   */
+  "include": ["src/**/*"],
+
+  /*
+   * exclude: [...]
+   * WHAT: Files/folders to skip (even if in include)
+   *
+   * WHY EACH EXCLUSION:
+   *
+   * 1. "node_modules" - Dependencies (already compiled)
+   * 2. "dist" - Build output (would cause infinite loop!)
+   * 3. "**\/*.spec.ts" - Test files (have their own config)
+   * 4. "**\/*.test.ts" - Test files (alternative naming)
+   * 5. "coverage" - Test coverage reports
+   * 6. "prisma.config.ts" - Prisma CLI config (uses different settings)
+   * 7. "src/generated/**\/*" - Auto-generated Prisma client
+   *
+   * PATTERN EXPLANATION:
+   * - **\/ = Any folder depth
+   * - *.spec.ts = Any file ending in .spec.ts
+   */
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "coverage",
+    "prisma.config.ts"
+    // "src/generated/**/*"
+  ]
+
+  /*
+   * ===== QUICK REFERENCE =====
+   *
+   * COMMON COMMANDS:
+   * pnpm build      - Compile TypeScript (uses this config)
+   * pnpm typecheck  - Check types without compiling
+   * tsc --showConfig - Show final merged configuration
+   *
+   * TROUBLESHOOTING:
+   * "Cannot find module" - Check moduleResolution and paths
+   * "any" errors - Enable strict: true or add types
+   * Slow builds - Enable incremental and skipLibCheck
+   *
+   * RECOMMENDED READING:
+   * 1. TypeScript Handbook: https://www.typescriptlang.org/docs/
+   * 2. tsconfig Reference: https://www.typescriptlang.org/tsconfig
+   * 3. TypeScript Deep Dive: https://basarat.gitbook.io/typescript/
+   */
+}
