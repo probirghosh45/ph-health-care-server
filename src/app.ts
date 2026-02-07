@@ -1,6 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+// /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+// /* eslint-disable @typescript-eslint/no-unsafe-call */
+// /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+
 import express, { Application, Request, Response } from "express";
 import { prisma } from "./app/lib/prisma";
 import { IndexRoutes } from "./app/routes";
@@ -17,18 +19,19 @@ app.use(express.json());
 app.use("/api/v1", IndexRoutes);
 
 // Basic route
-app.get('/', async (req: Request, res: Response) => {
+app.get('/', (req: Request, res: Response) => {
+    res.send('Welcome to PH Health Care Backed API');
 
-    const specialty = await prisma.specialty.create({
-        data: {
-            title: 'Cardiology 7'
-        }
-    })
-    res.status(201).json({
-        success: true,
-        message: 'API is working',
-        data: specialty
-    })
+    // const specialty = await prisma.specialty.create({
+    //     data: {
+    //         title: 'Cardiology 7'
+    //     }
+    // })
+    // res.status(201).json({
+    //     success: true,
+    //     message: 'API is working',
+    //     data: specialty
+    // })
 });
 
 export default app;

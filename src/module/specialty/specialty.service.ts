@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+// /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import { Request, Response } from "express";
@@ -34,7 +34,16 @@ const getAllSpecialty = async (req: Request, res: Response) => {
   }
 };
 
+const deleteSpecialty = async (id: string) => {
+  await prisma.specialty.delete({
+    where: {
+      id:  id,
+    },
+  });
+};
+
 export const SpecialtyService = {
   createSpecialty,
   getAllSpecialty,
+  deleteSpecialty,
 };
