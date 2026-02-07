@@ -21,7 +21,7 @@ app.get('/', async (req: Request, res: Response) => {
 
     const specialty = await prisma.specialty.create({
         data: {
-            title: 'Cardiology 2'
+            title: 'Cardiology 7'
         }
     })
     res.status(201).json({
