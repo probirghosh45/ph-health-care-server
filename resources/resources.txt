@@ -1,0 +1,13 @@
+
+Project Requirement: https://find-saminravi99.notion.site/PH-HealthCare-Backend-Project-Requirements-Document-2f7c48b8ac8c80d1a3c0c9f0dca631d7
+
+ERD: https://drive.google.com/file/d/114TgHqCKexwxputkVNKlYjJXRn_X4u-T/view?usp=sharing
+
+Excalidraw: https://excalidraw.com/#json=A4GhmCmfR2AEeEzgNoM0m,FEEGMXbnMKU41flqqiRVfw
+
+
+Github Repository:
+
+Part-1 Branch: https://github.com/Apollo-Level2-Web-Dev/L2B6-Backend-PH-Healthcare-Management-System/tree/part-1
+
+Development branch: https://github.com/Apollo-Level2-Web-Dev/L2B6-Backend-PH-Healthcare-Management-System/tree/development
