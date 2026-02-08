@@ -2,13 +2,14 @@
 // /* eslint-disable @typescript-eslint/no-unsafe-call */
 // /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-
+import { toNodeHandler } from "better-auth/node";
 import express, { Application, Request, Response } from "express";
-import { prisma } from "./app/lib/prisma";
+import { auth } from "./app/lib/auth";
 import { IndexRoutes } from "./app/routes";
 
 const app: Application = express();
 
+app.all("/api/auth/*", toNodeHandler(auth));
 
 // Enable URL-encoded form data parsing
 app.use(express.urlencoded({ extended: true }));
@@ -19,49 +20,22 @@ app.use(express.json());
 app.use("/api/v1", IndexRoutes);
 
 // Basic route
-app.get('/', (req: Request, res: Response) => {
-    res.send('Welcome to PH Health Care Backed API');
+app.get("/", (req: Request, res: Response) => {
+  res.send("Welcome to PH Health Care Backed API");
 
-    // const specialty = await prisma.specialty.create({
-    //     data: {
-    //         title: 'Cardiology 7'
-    //     }
-    // })
-    // res.status(201).json({
-    //     success: true,
-    //     message: 'API is working',
-    //     data: specialty
-    // })
+  // const specialty = await prisma.specialty.create({
+  //     data: {
+  //         title: 'Cardiology 7'
+  //     }
+  // })
+  // res.status(201).json({
+  //     success: true,
+  //     message: 'API is working',
+  //     data: specialty
+  // })
 });
 
 export default app;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import express, { type Application } from "express";
 // import { prisma } from "./shared/prisma.js";
