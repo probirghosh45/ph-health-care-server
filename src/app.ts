@@ -2,20 +2,19 @@
 // /* eslint-disable @typescript-eslint/no-unsafe-call */
 // /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import { toNodeHandler } from "better-auth/node";
 import express, { Application, Request, Response } from "express";
-import { auth } from "./app/lib/auth";
 import { IndexRoutes } from "./app/routes";
 
 const app: Application = express();
 
-app.all("/api/auth/*", toNodeHandler(auth));
+// app.all("/api/auth/", toNodeHandler(auth));
 
-// Enable URL-encoded form data parsing
-app.use(express.urlencoded({ extended: true }));
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+// Enable URL-encoded form data parsing
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/v1", IndexRoutes);
 
