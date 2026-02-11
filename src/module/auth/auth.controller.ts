@@ -4,11 +4,12 @@
 import { Request, Response } from "express";
 import { catchAsync } from "../../app/shared/catchAsync";
 import { AuthService } from "./auth.service";
+import status from "http-status";
 
 const registerPatient = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
   const result = await AuthService.registerPatient(payload);
-  res.status(201).json({
+  res.status(status.CREATED).json({
     success: true,
     message: "Patient registered successfully",
     data: result,
@@ -18,7 +19,7 @@ const registerPatient = catchAsync(async (req: Request, res: Response) => {
 const loginPatient = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
   const result = await AuthService.loginPatient(payload);
-  res.status(200).json({
+  res.status(status.OK).json({
     success: true,
     message: "Patient logged in successfully",
     data: result,

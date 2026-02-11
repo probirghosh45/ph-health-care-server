@@ -7,6 +7,7 @@
 import { Request, Response } from "express";
 import { prisma } from "../../app/lib/prisma";
 import { Specialty } from "../../generated/prisma/client";
+import status from "http-status";
 
 const createSpecialty = async (payload: Specialty): Promise<Specialty> => {
   const specialty = await prisma.specialty.create({
@@ -19,14 +20,14 @@ const createSpecialty = async (payload: Specialty): Promise<Specialty> => {
 const getAllSpecialty = async (req: Request, res: Response) => {
   try {
     const specialties = await prisma.specialty.findMany();
-    res.status(200).json({
+    res.status(status.OK).json({
       success: true,
       message: "specialties retrieved successfully",
       data: specialties,
     });
   } catch (error: any) {
     console.log(error);
-    res.status(500).json({
+    res.status(status.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: "failed to retrieve specialties",
       error: error.message,

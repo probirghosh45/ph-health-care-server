@@ -1,3 +1,10 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+// /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+// /* eslint-disable @typescript-eslint/no-unsafe-call */
+// /* eslint-disable @typescript-eslint/no-confusing-void-expression */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable curly */
@@ -7,6 +14,7 @@
 // /* eslint-disable no-console */
 
 import { auth } from "../../app/lib/auth";
+import { prisma } from "../../app/lib/prisma";
 import { UserStatus } from "../../generated/prisma/enums";
 
 interface RegisterPatientPayload {
@@ -39,6 +47,7 @@ const registerPatient = async (payload: RegisterPatientPayload) => {
 };
 
 interface LoginPatientPayload {
+  name?: string;
   email: string;
   password: string;
 }
@@ -69,10 +78,34 @@ const loginPatient = async (payload: LoginPatientPayload) => {
     throw new Error("Your account is deleted. Please contact support.");
   }
 
-  return data;
-};
+  try {
+    const patient = await prisma.$transaction(async (tx) => {
+      const patientTx = await tx.patient.create({
+        data: {
+          userId: data.user.id,
+          name: payload.name || data.user.name || "Patient",
+          email: payload.email,
+        },
+      });
 
-//  create patient profile after sign up in user model
+      return patientTx;
+    });
+
+    return {
+      ...data,
+      patient,
+    };
+  } catch (error) {
+    console.error("Error during patient login transaction:", error);
+    await prisma.patient.deleteMany({
+      where: { userId: data.user.id },
+    });
+
+    throw new Error(
+      "An error occurred while logging in. Please try again later.",
+    );
+  }
+};
 
 export const AuthService = {
   registerPatient,

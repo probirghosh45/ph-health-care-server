@@ -9,20 +9,21 @@
 
 import { NextFunction, Request, Response } from "express";
 import { SpecialtyService } from "./specialty.service";
+import status from "http-status";
 
 const createSpecialty = async (req: Request, res: Response) => {
   try {
     const payload = req.body;
     const result = await SpecialtyService.createSpecialty(payload);
 
-    res.status(201).json({
+    res.status(status.CREATED).json({
       success: true,
       message: "specialty created successfully",
       data: result,
     });
   } catch (error: any) {
     console.log(error.message);
-    res.status(500).json({
+    res.status(status.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: "failed to create specialty",
       error: error.message,
@@ -33,14 +34,14 @@ const createSpecialty = async (req: Request, res: Response) => {
 const getAllSpecialty = async (req: Request, res: Response) => {
   try {
     const specialties = await SpecialtyService.getAllSpecialty(req, res);
-    res.status(200).json({
+    res.status(status.OK).json({
       success: true,
       message: "specialties retrieved successfully",
       data: specialties,
     });
   } catch (error: any) {
     console.log(error);
-    res.status(500).json({
+    res.status(status.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: "failed to retrieve specialties",
       error: error.message,
@@ -56,14 +57,14 @@ const deleteSpecialty = async (
   try {
     const id = req.params.id;
     await SpecialtyService.deleteSpecialty(id as string);
-    res.status(200).json({
+    res.status(status.OK).json({
       success: true,
       message: "specialty deleted successfully",
     });
   } catch (error: any) {
     next(error);
     console.log(error);
-    res.status(500).json({
+    res.status(status.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: "failed to delete specialty",
       error: error.message,

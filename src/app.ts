@@ -1,68 +1,28 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 // /* eslint-disable @typescript-eslint/no-unsafe-call */
 // /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import express, { Application, Request, Response } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import { IndexRoutes } from "./app/routes";
+import { globalErrorHandler } from "./middleware/globalErrorHandler";
+import notFound from "./middleware/notFound";
 
 const app: Application = express();
 
-// app.all("/api/auth/", toNodeHandler(auth));
-
-
-// Middleware to parse JSON bodies
 app.use(express.json());
 
-// Enable URL-encoded form data parsing
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/v1", IndexRoutes);
 
-// Basic route
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to PH Health Care Backed API");
-
-  // const specialty = await prisma.specialty.create({
-  //     data: {
-  //         title: 'Cardiology 7'
-  //     }
-  // })
-  // res.status(201).json({
-  //     success: true,
-  //     message: 'API is working',
-  //     data: specialty
-  // })
 });
 
+app.use(globalErrorHandler);
+app.use(notFound);
+
+
+
 export default app;
-
-// import express, { type Application } from "express";
-// import { prisma } from "./shared/prisma.js";
-
-// const app: Application = express();
-
-// app.get("/", async (req, res) => {
-//   const email = "pk@gmail.com";
-
-//   const existingUser = await prisma.user.findUnique({
-//     where: { email },
-//   });
-
-//   if (!existingUser) {
-//     await prisma.user.create({
-//       data: {
-//         email,
-//         name: "PK",
-//       },
-//     });
-//   }
-
-//   //   await prisma.user.create({
-//   //     data: {
-//   //       name: "PK",
-//   //       email: "pk@example.com"
-//   //     },
-//   //   });
-//   res.send("Welcome to PH Health Care Backed API");
-// });
-// export default app;

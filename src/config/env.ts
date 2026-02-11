@@ -25,7 +25,7 @@ const requiredEnv = (key: string): string => {
 const loadEnvVariables = (): EnvConfig => {
   return {
     NODE_ENV : (process.env.NODE_ENV as NodeEnv) || "development",
-    PORT: process.env.PORT ? Number(process.env.PORT) : 3000,
+    PORT: process.env.PORT ? Number(process.env.PORT) : 5000,
     DATABASE_URL: requiredEnv("DATABASE_URL"),
     BETTER_AUTH_SECRET: requiredEnv("BETTER_AUTH_SECRET"),
     BETTER_AUTH_URL: process.env.BETTER_AUTH_URL ?? "https://better-auth.pris.ly",
