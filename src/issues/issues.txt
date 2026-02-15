@@ -1,3 +1,9 @@
 1. need to fix catchAsync
 2. auth.prisma,patient.prisma is not working, need to fix it , can not generate , always i need to write in schema.prisma which is not good, need to fix it
 
+
+
+# do it yourself [doctor]
+# // router.get("/:id", DoctorController.getAllDoctorsById);
+# // router.get("/:id", DoctorController.updateDoctor);
+# // router.get("/:id", DoctorController.deleteDoctor);
