@@ -7,3 +7,5 @@
 # // router.get("/:id", DoctorController.getAllDoctorsById);
 # // router.get("/:id", DoctorController.updateDoctor);
 # // router.get("/:id", DoctorController.deleteDoctor);
+
+part-2 : module skipped => 38.7 - 38.11
