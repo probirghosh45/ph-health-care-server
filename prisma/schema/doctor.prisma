@@ -26,6 +26,10 @@ model Doctor {
     @@index([isDeleted, deletedAt], name: "doctor_deletion_index")
     @@map("doctor")  
     doctorSpecialties DoctorSpecialty[]
+    appointments Appointment[]
+    prescriptions Prescription[]
+    reviews Review[]
+    doctorSchedules DoctorSchedules[]
 }
 
 
