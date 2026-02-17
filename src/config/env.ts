@@ -6,6 +6,7 @@ dotenv.config();
 type NodeEnv = "development" | "production" | "test";
 
 interface EnvConfig {
+  [x: string]: string;
   NODE_ENV: NodeEnv;
   PORT: number;
   DATABASE_URL: string;

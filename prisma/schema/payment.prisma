@@ -14,9 +14,3 @@ model Payment {
     @@index([transactionId])
     @@map("payments")
 }
-
-enum PaymentStatus {
-    UNPAID
-    PAID
-    FAILED
-}

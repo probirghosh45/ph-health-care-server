@@ -9,3 +9,20 @@
 # // router.get("/:id", DoctorController.deleteDoctor);
 
 part-2 : module skipped => 38.7 - 38.11
+
+copy-paste -----[Part-3,39-01,Code Not Written,Just Explain Shortly]----------------------
+        => checkAuth & its additional files
+        => cookies & its additional files
+        =>jwt & its additional files
+        => catchAsync & its additional files
+        > admin
+        > appointment
+        > medicalReport
+        > patientHealth
+        > payment
+        > prescription
+        > review
+        > schedule
+        ====================
+        explore from ER Diagram & write schema
+  -------------------------------------------------------      
